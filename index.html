@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ABC 3.0 Gym</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0a0a0a;--surface:#111111;--surface2:#1a1a1a;
+  --border:#222222;--accent:#e8ff00;--accent2:#ff4d00;
+  --text:#f0f0f0;--muted:#666;--radius:12px;
+}
+html,body{height:100%;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;}
+.page{display:none;} .page.active{display:flex;}
+.view{display:none;} .view.active{display:block;}
+
+/* ══ LOADING SCREEN ══ */
+#loading-screen{
+  position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;z-index:999;gap:20px;
+}
+#loading-screen.hide{display:none;}
+.loader-logo{font-family:'Bebas Neue',sans-serif;font-size:52px;letter-spacing:4px;color:var(--accent);}
+.loader-bar{width:200px;height:3px;background:var(--border);border-radius:2px;overflow:hidden;}
+.loader-bar-fill{height:100%;width:0%;background:var(--accent);border-radius:2px;animation:loadFill 1.8s ease forwards;}
+@keyframes loadFill{to{width:100%;}}
+.loader-text{font-size:13px;color:var(--muted);}
+
+/* ══ LOGIN ══ */
+#login-page{min-height:100vh;flex-direction:row;}
+.login-brand{flex:1;background:var(--accent);display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:60px;position:relative;overflow:hidden;}
+.login-brand::after{content:'ABC';position:absolute;font-family:'Bebas Neue',sans-serif;font-size:200px;color:rgba(0,0,0,0.05);bottom:-20px;right:-10px;line-height:1;pointer-events:none;}
+.brand-logo{font-family:'Bebas Neue',sans-serif;font-size:80px;color:#000;line-height:.9;letter-spacing:3px;}
+.brand-tagline{font-size:17px;color:#333;margin-top:16px;font-weight:500;max-width:260px;line-height:1.5;}
+.login-form-side{flex:1;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:60px 48px;}
+.login-box{width:100%;max-width:380px;}
+.login-title{font-family:'Bebas Neue',sans-serif;font-size:40px;letter-spacing:2px;margin-bottom:8px;}
+.login-sub{color:var(--muted);font-size:14px;margin-bottom:36px;}
+.field{margin-bottom:20px;}
+.field label{display:block;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.field input,.field select,.field textarea{width:100%;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;outline:none;transition:border-color .2s;}
+.field textarea{resize:vertical;min-height:80px;line-height:1.5;}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);}
+.field select option{background:var(--surface);}
+.btn-primary{width:100%;padding:15px;background:var(--accent);color:#000;border:none;border-radius:var(--radius);font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;cursor:pointer;transition:opacity .15s;display:flex;align-items:center;justify-content:center;gap:10px;}
+.btn-primary:hover{opacity:.88;}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed;}
+.spinner{width:18px;height:18px;border:2px solid rgba(0,0,0,.3);border-top-color:#000;border-radius:50%;animation:spin .6s linear infinite;display:none;}
+.spinner.show{display:block;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.error-msg{background:rgba(255,77,0,.15);border:1px solid var(--accent2);color:var(--accent2);padding:12px 16px;border-radius:8px;font-size:14px;margin-bottom:20px;}
+.info-hint{margin-top:24px;padding:14px 16px;background:#111;border-radius:10px;font-size:13px;color:#555;line-height:1.8;}
+.info-hint strong{color:#444;} .info-hint span{color:var(--accent);}
+
+/* ══ NOTIFICATION MODAL ══ */
+#notif-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);align-items:center;justify-content:center;z-index:300;padding:20px;}
+#notif-overlay.show{display:flex;}
+.notif-modal{background:var(--surface);border:1px solid var(--border);border-radius:20px;width:100%;max-width:520px;overflow:hidden;animation:slideUp .3s ease;}
+@keyframes slideUp{from{transform:translateY(30px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+.notif-header{background:var(--accent);padding:28px 32px 24px;}
+.notif-day-badge{display:inline-block;background:rgba(0,0,0,.15);padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;color:#000;}
+.notif-title{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:1px;color:#000;}
+.notif-body{padding:28px 32px;}
+.notif-routine-text{font-size:16px;line-height:1.7;color:var(--text);}
+.notif-tip{background:var(--surface2);border-left:3px solid var(--accent);padding:14px 16px;border-radius:0 8px 8px 0;margin-top:20px;font-size:13px;color:var(--muted);}
+.notif-footer{padding:0 32px 28px;}
+.btn-dismiss{width:100%;padding:14px;background:transparent;border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;cursor:pointer;transition:background .2s;}
+.btn-dismiss:hover{background:var(--surface2);}
+
+/* ══ APP LAYOUT ══ */
+#app-page{min-height:100vh;flex-direction:row;}
+.mobile-topbar{display:none;position:fixed;top:0;left:0;right:0;z-index:50;background:var(--surface);border-bottom:1px solid var(--border);height:56px;align-items:center;justify-content:space-between;padding:0 16px;}
+.topbar-logo{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;}
+.topbar-logo span{color:var(--accent);}
+.hamburger{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;gap:5px;padding:4px;}
+.hamburger span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px;transition:all .25s;}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+.drawer-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:40;}
+.drawer-overlay.show{display:block;}
+.sidebar{width:240px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:28px 0;position:fixed;top:0;left:0;bottom:0;z-index:45;transition:transform .28s ease;}
+.sidebar-logo{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:2px;padding:0 24px 28px;border-bottom:1px solid var(--border);}
+.sidebar-logo span{color:var(--accent);}
+.sidebar-nav{flex:1;padding:20px 12px;display:flex;flex-direction:column;gap:4px;overflow-y:auto;}
+.nav-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:500;color:var(--muted);transition:all .2s;border:none;background:none;width:100%;text-align:left;}
+.nav-item:hover{background:var(--surface2);color:var(--text);}
+.nav-item.active{background:var(--accent);color:#000;}
+.nav-icon{font-size:18px;width:20px;text-align:center;}
+.sidebar-bottom{padding:16px 12px;border-top:1px solid var(--border);}
+.user-badge{display:flex;align-items:center;gap:12px;padding:12px;background:var(--surface2);border-radius:10px;margin-bottom:10px;}
+.user-avatar{width:36px;height:36px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#000;flex-shrink:0;}
+.u-name{font-size:13px;font-weight:600;} .u-role{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
+.btn-logout{width:100%;padding:10px;background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--muted);font-size:13px;cursor:pointer;transition:all .2s;}
+.btn-logout:hover{border-color:var(--accent2);color:var(--accent2);}
+.main-content{margin-left:240px;flex:1;padding:36px;min-width:0;}
+.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--surface);border-top:1px solid var(--border);padding:8px 0 env(safe-area-inset-bottom,8px);}
+.bottom-nav-inner{display:flex;justify-content:space-around;}
+.bn-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 16px;cursor:pointer;border:none;background:none;color:var(--muted);font-size:10px;font-family:'DM Sans',sans-serif;letter-spacing:.5px;text-transform:uppercase;transition:color .2s;}
+.bn-item.active{color:var(--accent);}
+.bn-icon{font-size:20px;}
+
+/* ══ COMMON COMPONENTS ══ */
+.page-header{margin-bottom:28px;}
+.page-title{font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:1px;}
+.page-sub{color:var(--muted);font-size:14px;margin-top:4px;}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:14px;margin-bottom:28px;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;}
+.stat-card-num{font-family:'Bebas Neue',sans-serif;font-size:40px;color:var(--accent);line-height:1;}
+.stat-card-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:4px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:20px;}
+.card-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;margin-bottom:16px;}
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+table{width:100%;border-collapse:collapse;}
+th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);font-weight:600;white-space:nowrap;}
+td{padding:12px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--surface2);}
+.badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.5px;}
+.badge-premium{background:rgba(232,255,0,.15);color:var(--accent);}
+.badge-basic{background:rgba(255,255,255,.08);color:#aaa;}
+.id-chip{font-family:monospace;font-size:12px;background:var(--surface2);border:1px solid var(--border);padding:3px 8px;border-radius:6px;color:var(--accent);}
+.btn-danger{padding:5px 12px;background:transparent;color:var(--accent2);border:1px solid var(--accent2);border-radius:8px;font-size:12px;cursor:pointer;transition:background .2s;white-space:nowrap;}
+.btn-danger:hover{background:rgba(255,77,0,.15);}
+.btn-secondary{padding:6px 14px;background:transparent;color:var(--text);border:1px solid var(--border);border-radius:8px;font-size:12px;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.btn-secondary:hover{background:var(--surface2);border-color:var(--accent);}
+.member-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:12px;display:flex;align-items:center;gap:12px;}
+.mc-avatar{width:40px;height:40px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;color:#000;flex-shrink:0;}
+.mc-info{flex:1;min-width:0;}
+.mc-name{font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.mc-meta{font-size:12px;color:var(--muted);margin-top:2px;}
+.mc-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.btn-add{padding:12px 28px;background:var(--accent);color:#000;border:none;border-radius:var(--radius);font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;cursor:pointer;transition:opacity .2s;margin-top:8px;display:inline-flex;align-items:center;gap:8px;}
+.btn-add:hover{opacity:.85;} .btn-add:disabled{opacity:.5;cursor:not-allowed;}
+.success-banner{background:rgba(232,255,0,.1);border:1px solid var(--accent);color:var(--accent);padding:12px 16px;border-radius:8px;font-size:14px;margin-bottom:16px;}
+.cred-box{background:var(--surface2);border:1px solid var(--accent);border-radius:var(--radius);padding:18px 20px;margin-top:18px;}
+.cred-title{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:10px;font-weight:600;}
+.cred-row{display:flex;gap:8px;align-items:center;margin-bottom:8px;font-size:14px;}
+.cred-key{color:var(--muted);min-width:80px;}
+.cred-val{font-family:monospace;color:var(--text);font-size:15px;}
+.routine-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;}
+.routine-day-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;}
+.routine-day-card.today{border-color:var(--accent);}
+.routine-day-label{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1px;color:var(--muted);margin-bottom:6px;}
+.routine-day-card.today .routine-day-label{color:var(--accent);}
+.routine-day-text{font-size:13px;color:var(--text);line-height:1.6;}
+.today-tag{display:inline-block;background:var(--accent);color:#000;font-size:10px;font-weight:700;letter-spacing:1px;padding:2px 7px;border-radius:4px;margin-left:6px;vertical-align:middle;text-transform:uppercase;}
+.today-workout-card{padding:16px 18px;background:rgba(232,255,0,.08);border:1px solid var(--accent);border-radius:10px;font-size:16px;line-height:1.8;margin-bottom:14px;}
+.view-notif-btn{padding:10px 20px;background:transparent;border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;transition:background .2s;}
+.view-notif-btn:hover{background:var(--surface2);}
+
+/* ══ ROUTINE EDITOR ══ */
+.routine-editor{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;}
+.re-header{background:var(--surface2);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;}
+.re-header:hover{background:#1e1e1e;}
+.re-member-info{display:flex;align-items:center;gap:12px;}
+.re-avatar{width:34px;height:34px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#000;flex-shrink:0;}
+.re-name{font-weight:600;font-size:14px;} .re-id{font-size:12px;color:var(--muted);}
+.re-toggle{font-size:18px;color:var(--muted);transition:transform .2s;}
+.re-body{display:none;padding:20px;}
+.re-body.open{display:block;}
+.day-row{margin-bottom:14px;}
+.day-label{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1px;color:var(--accent);margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+.day-label .today-badge{background:var(--accent);color:#000;font-size:10px;padding:1px 7px;border-radius:4px;font-family:'DM Sans',sans-serif;font-weight:700;letter-spacing:.5px;}
+.day-input{width:100%;padding:10px 14px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;transition:border-color .2s;resize:none;}
+.day-input:focus{border-color:var(--accent);}
+.re-footer{display:flex;align-items:center;gap:12px;margin-top:8px;}
+.re-save-btn{padding:9px 20px;background:var(--accent);color:#000;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;cursor:pointer;transition:opacity .2s;display:inline-flex;align-items:center;gap:8px;}
+.re-save-btn:hover{opacity:.85;} .re-save-btn:disabled{opacity:.5;cursor:not-allowed;}
+.save-ok{font-size:13px;color:var(--accent);opacity:0;transition:opacity .3s;}
+.save-ok.show{opacity:1;}
+
+/* ══ FIREBASE STATUS BADGE ══ */
+.fb-status{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);padding:4px 10px;background:var(--surface2);border-radius:20px;border:1px solid var(--border);}
+.fb-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);}
+.fb-dot.connected{background:#22c55e;}
+.fb-dot.error{background:var(--accent2);}
+
+/* ══ RESPONSIVE ══ */
+@media(max-width:768px){
+  #login-page{flex-direction:column;}
+  .login-brand{padding:36px 28px 28px;flex:none;}
+  .login-brand::after{font-size:130px;}
+  .brand-logo{font-size:56px;}
+  .login-form-side{padding:28px 20px 40px;}
+  .mobile-topbar{display:flex;}
+  .sidebar{transform:translateX(-100%);}
+  .sidebar.open{transform:translateX(0);}
+  .main-content{margin-left:0;padding:76px 14px 88px;}
+  .bottom-nav{display:block;}
+  .page-title{font-size:30px;}
+  .stats-grid{grid-template-columns:repeat(2,1fr);gap:10px;}
+  .stat-card-num{font-size:32px;}
+  .form-grid{grid-template-columns:1fr;}
+  .notif-header{padding:20px 20px 16px;}
+  .notif-title{font-size:28px;}
+  .notif-body{padding:18px 20px;}
+  .notif-footer{padding:0 20px 18px;}
+  .routine-grid{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:480px){
+  .login-brand{padding:24px 18px 20px;}
+  .brand-logo{font-size:44px;}
+  .login-form-side{padding:20px 16px 32px;}
+  .login-title{font-size:30px;}
+  .main-content{padding:70px 10px 84px;}
+  .page-title{font-size:26px;}
+  .stats-grid{grid-template-columns:repeat(2,1fr);gap:8px;}
+  .stat-card{padding:12px;} .stat-card-num{font-size:28px;}
+  .card{padding:12px;}
+  .routine-grid{grid-template-columns:1fr;}
+  .hide-sm{display:none;}
+  .bn-item{padding:6px 10px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ LOADING ══ -->
+<div id="loading-screen">
+  <div class="loader-logo">ABC 3.0</div>
+  <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+  <div class="loader-text" id="loader-text">Connecting to Firebase…</div>
+</div>
+
+<!-- ══ LOGIN ══ -->
+<div id="login-page" class="page">
+  <div class="login-brand">
+    <div class="brand-logo">ABC<br>3.0</div>
+    <div class="brand-tagline">Train harder. Track smarter. Build your best body.</div>
+  </div>
+  <div class="login-form-side">
+    <div class="login-box">
+      <div class="login-title">SIGN IN</div>
+      <div class="login-sub">Use your email and password to continue</div>
+      <div class="error-msg" id="login-error" style="display:none"></div>
+      <div class="field"><label>Email</label><input id="login-email" type="email" placeholder="you@email.com" autocomplete="email"/></div>
+      <div class="field"><label>Password</label><input id="login-pass" type="password" placeholder="Your password" autocomplete="current-password"/></div>
+      <button class="btn-primary" id="login-btn" onclick="doLogin()">
+        <span id="login-btn-text">LOGIN →</span>
+        <div class="spinner" id="login-spinner"></div>
+      </button>
+      <div class="info-hint">
+        <strong>Owner account:</strong> Set up via Firebase Console.<br>
+        Create a user with email <span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7c130b12190e3c150e13121a130e1b19521b0511">[email&#160;protected]</a></span> in Firebase Auth, then add a Firestore document in <span>users/owner</span> with <span>role: "owner"</span>.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ NOTIFICATION ══ -->
+<div id="notif-overlay">
+  <div class="notif-modal">
+    <div class="notif-header">
+      <div class="notif-day-badge" id="notif-day-badge">Today • Monday</div>
+      <div class="notif-title">Your Daily Routine 💪</div>
+    </div>
+    <div class="notif-body">
+      <div class="notif-routine-text" id="notif-routine-text"></div>
+      <div class="notif-tip" id="notif-tip"></div>
+    </div>
+    <div class="notif-footer">
+      <button class="btn-dismiss" onclick="closeNotif()">Got it, let's crush it! →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ APP ══ -->
+<div id="app-page" class="page">
+  <div class="mobile-topbar">
+    <div class="topbar-logo">ABC <span>3.0</span></div>
+    <button class="hamburger" id="hamburger" onclick="toggleDrawer()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">ABC <span>3.0</span></div>
+    <nav class="sidebar-nav" id="sidebar-nav"></nav>
+    <div class="sidebar-bottom">
+      <div style="margin-bottom:10px;padding:0 2px;">
+        <div class="fb-status"><div class="fb-dot connected" id="fb-dot"></div><span id="fb-status-text">Firebase connected</span></div>
+      </div>
+      <div class="user-badge">
+        <div class="user-avatar" id="user-avatar">O</div>
+        <div>
+          <div class="u-name" id="user-name-display">Owner</div>
+          <div class="u-role" id="user-role-display">Owner</div>
+        </div>
+      </div>
+      <button class="btn-logout" onclick="doLogout()">← Logout</button>
+    </div>
+  </aside>
+  <div class="main-content">
+
+    <!-- OWNER: Dashboard -->
+    <div class="view" id="view-dashboard">
+      <div class="page-header">
+        <div class="page-title">DASHBOARD</div>
+        <div class="page-sub" id="dash-sub"></div>
+      </div>
+      <div class="stats-grid" id="dash-stats"></div>
+      <div class="card">
+        <div class="card-title">RECENT MEMBERS</div>
+        <div class="table-wrap">
+          <table><thead><tr><th>ID</th><th>Name</th><th>Plan</th><th class="hide-sm">Joined</th></tr></thead>
+          <tbody id="recent-tbody"></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- OWNER: Members -->
+    <div class="view" id="view-members">
+      <div class="page-header">
+        <div class="page-title">ALL MEMBERS</div>
+        <div class="page-sub" id="members-sub"></div>
+      </div>
+      <div class="card">
+        <div class="table-wrap">
+          <table><thead><tr><th>ID</th><th>Name</th><th class="hide-sm">Email</th><th>Plan</th><th class="hide-sm">Joined</th><th></th></tr></thead>
+          <tbody id="all-tbody"></tbody></table>
+        </div>
+      </div>
+      <div id="member-cards-list"></div>
+    </div>
+
+    <!-- OWNER: Add Member -->
+    <div class="view" id="view-add">
+      <div class="page-header">
+        <div class="page-title">ADD MEMBER</div>
+        <div class="page-sub">Creates Firebase Auth account + saves member data to Firestore</div>
+      </div>
+      <div class="card" style="max-width:600px">
+        <div class="card-title">MEMBER DETAILS</div>
+        <div class="success-banner" id="add-success" style="display:none"></div>
+        <div class="error-msg" id="add-error" style="display:none"></div>
+        <div class="form-grid">
+          <div class="field"><label>Full Name *</label><input id="f-name" placeholder="John Smith"/></div>
+          <div class="field"><label>Email * (used for login)</label><input id="f-email" type="email" placeholder="john@email.com"/></div>
+          <div class="field"><label>Phone</label><input id="f-phone" type="tel" placeholder="9876543210"/></div>
+          <div class="field"><label>Membership Plan</label><select id="f-plan"><option>Basic</option><option>Premium</option></select></div>
+          <div class="field"><label>Member ID (e.g. M003)</label><input id="f-memberid" placeholder="Auto-generated if empty"/></div>
+          <div class="field"><label>Set Password *</label><input id="f-pass" type="password" placeholder="Min 6 characters"/></div>
+        </div>
+        <button class="btn-add" id="add-btn" onclick="addMember()">
+          <span id="add-btn-text">ADD MEMBER →</span>
+          <div class="spinner" id="add-spinner"></div>
+        </button>
+        <div class="cred-box" id="cred-box" style="display:none">
+          <div class="cred-title">🔐 Credentials — Share with member</div>
+          <div class="cred-row"><span class="cred-key">Name:</span><span class="cred-val" id="cred-name"></span></div>
+          <div class="cred-row"><span class="cred-key">Member ID:</span><span class="cred-val" id="cred-id"></span></div>
+          <div class="cred-row"><span class="cred-key">Email:</span><span class="cred-val" id="cred-email"></span></div>
+          <div class="cred-row"><span class="cred-key">Password:</span><span class="cred-val" id="cred-pass"></span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OWNER: Routines -->
+    <div class="view" id="view-routines">
+      <div class="page-header">
+        <div class="page-title">MANAGE ROUTINES</div>
+        <div class="page-sub">Set or edit the daily workout routine for each member — saved to Firebase instantly</div>
+      </div>
+      <div id="routine-editors"></div>
+    </div>
+
+    <!-- MEMBER: Dashboard -->
+    <div class="view" id="view-member-dash">
+      <div class="page-header">
+        <div class="page-title">WELCOME BACK</div>
+        <div class="page-sub" id="member-dash-sub"></div>
+      </div>
+      <div class="stats-grid" id="member-stats"></div>
+      <div class="card">
+        <div class="card-title" id="today-card-title">TODAY'S WORKOUT</div>
+        <div class="today-workout-card" id="today-workout-text"></div>
+        <button class="view-notif-btn" onclick="showNotif()">📋 View as Notification</button>
+      </div>
+    </div>
+
+    <!-- MEMBER: My Routine -->
+    <div class="view" id="view-routine">
+      <div class="page-header">
+        <div class="page-title">MY ROUTINE</div>
+        <div class="page-sub">Your full weekly training schedule</div>
+      </div>
+      <div class="routine-grid" id="routine-grid"></div>
+    </div>
+
+  </div>
+  <nav class="bottom-nav"><div class="bottom-nav-inner" id="bottom-nav-inner"></div></nav>
+</div>
+
+<!-- ══ FIREBASE SDK (compat) ══ -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+// ── Firebase Init ─────────────────────────────────────────────────
+const firebaseConfig = {
+  apiKey: "AIzaSyDVPaaRLbEv796fxoId0jtXtV1JhrpFdE0",
+  authDomain: "abc-gym-4dc17.firebaseapp.com",
+  projectId: "abc-gym-4dc17",
+  storageBucket: "abc-gym-4dc17.firebasestorage.app",
+  messagingSenderId: "377757615025",
+  appId: "1:377757615025:web:62ad568230488a82d57390",
+  measurementId: "G-69KVZ649H8"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db   = firebase.firestore();
+
+// ── Persistent login — stays logged in after browser close ────────
+auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+
+// ── Constants ─────────────────────────────────────────────────────
+const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const TIPS = [
+  '💧 Stay hydrated — drink at least 2–3 litres of water today.',
+  '🥗 Fuel your workout with a protein-rich meal 1 hour before.',
+  '😴 Quality sleep accelerates muscle recovery. Aim for 7–8 hours.',
+  '🔥 Warm up for 5 minutes before starting your routine.',
+  '📈 Track your progress — small wins add up to big results!',
+  '🧘 Cool down with stretching for 10 minutes after your workout.',
+  '🍌 A banana before workout gives great energy. Try it!'
+];
+const DEFAULT_ROUTINE = {
+  Sunday:'Rest & Recovery — Stretching & Foam Rolling',
+  Monday:'Chest & Triceps — Bench Press 4×10, Push-ups 3×15',
+  Tuesday:'Back & Biceps — Pull-ups 4×8, Barbell Rows 4×10',
+  Wednesday:'Legs — Squats 4×10, Lunges 3×12',
+  Thursday:'Shoulders — OHP 4×10, Lateral Raises 3×15',
+  Friday:'Core & Cardio — Plank 3×60s, 20min Run',
+  Saturday:'Full Body HIIT — 30min Circuit Training'
+};
+
+let currentUser    = null;
+let currentProfile = null;
+let members        = [];
+const today = DAYS[new Date().getDay()];
+
+// ── Auth State Observer ───────────────────────────────────────────
+// Firebase will auto-restore the session from localStorage on page load.
+// We update the loader text so user knows what's happening.
+auth.onAuthStateChanged(async (user) => {
+  if (user) {
+    document.getElementById('loader-text').textContent = 'Restoring your session…';
+    currentUser = user;
+    await loadProfile(user.uid);
+  } else {
+    currentUser    = null;
+    currentProfile = null;
+    hideLoader();
+    showPage('login');
+  }
+});
+
+function hideLoader() {
+  document.getElementById('loading-screen').classList.add('hide');
+}
+
+// ── Normalize doc fields (handles Email/email, Name/name, Role/role) ──
+function normalizeDoc(data) {
+  return {
+    name:     data.name     || data.Name     || '',
+    email:    data.email    || data.Email    || '',
+    role:    (data.role     || data.Role     || 'member').toLowerCase().trim(),
+    memberId: data.memberId || data.MemberId || ''
+  };
+}
+
+// ── Load Profile ──────────────────────────────────────────────────
+async function loadProfile(uid) {
+  try {
+    const snap = await db.collection('users').doc(uid).get();
+    if (snap.exists) {
+      const normalized = normalizeDoc(snap.data());
+      currentProfile = { uid, ...normalized };
+      console.log('Loaded profile:', JSON.stringify(currentProfile));
+      hideLoader();
+      await showApp();
+      return;
+    }
+    // Fallback: search members collection by authUid
+    const mSnap = await db.collection('members').where('authUid','==',uid).limit(1).get();
+    if (!mSnap.empty) {
+      const d    = mSnap.docs[0];
+      const data = d.data();
+      currentProfile = { uid, role:'member', name:data.name||'', email:data.email||'', memberId:data.memberId||'' };
+      hideLoader();
+      await showApp();
+      return;
+    }
+    await auth.signOut();
+    hideLoader();
+    showLoginError('No profile found. Please create your owner doc in Firestore → users → {UID} with fields: name, role:"owner", email.');
+    showPage('login');
+  } catch(e) {
+    console.error('loadProfile error:', e);
+    await auth.signOut();
+    hideLoader();
+    showLoginError('Firebase error: ' + e.message);
+    showPage('login');
+  }
+}
+
+// ── Login ─────────────────────────────────────────────────────────
+async function doLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass  = document.getElementById('login-pass').value.trim();
+  if (!email || !pass) { showLoginError('Please enter email and password.'); return; }
+  setLoginLoading(true);
+  document.getElementById('login-error').style.display = 'none';
+  try {
+    await auth.signInWithEmailAndPassword(email, pass);
+  } catch(e) {
+    setLoginLoading(false);
+    const msgs = {
+      'auth/user-not-found':    'No account found with this email.',
+      'auth/wrong-password':    'Incorrect password.',
+      'auth/invalid-email':     'Invalid email address.',
+      'auth/invalid-credential':'Invalid email or password.',
+      'auth/too-many-requests': 'Too many attempts. Try again later.'
+    };
+    showLoginError(msgs[e.code] || e.message);
+  }
+}
+document.getElementById('login-pass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+function setLoginLoading(on) {
+  document.getElementById('login-btn').disabled = on;
+  document.getElementById('login-btn-text').textContent = on ? 'Signing in…' : 'LOGIN →';
+  document.getElementById('login-spinner').classList.toggle('show', on);
+}
+function showLoginError(msg) {
+  const el = document.getElementById('login-error');
+  el.textContent = msg; el.style.display = 'block';
+}
+
+// ── Logout ────────────────────────────────────────────────────────
+async function doLogout() {
+  await auth.signOut();
+  closeNotif(); closeDrawer();
+}
+
+// ── Show App ──────────────────────────────────────────────────────
+async function showApp() {
+  setLoginLoading(false);
+  showPage('app');
+  document.getElementById('user-avatar').textContent       = (currentProfile.name||'U')[0].toUpperCase();
+  document.getElementById('user-name-display').textContent = currentProfile.name || currentProfile.email;
+  document.getElementById('user-role-display').textContent = currentProfile.role === 'owner' ? 'Owner' : 'ID: ' + (currentProfile.memberId||'');
+  buildNav();
+  if (currentProfile.role === 'owner') {
+    await loadMembers();
+    loadOwnerDash();
+    setView('dashboard');
+  } else {
+    await loadMemberData();
+    loadMemberDash();
+    setView('member-dash');
+    showNotif();
+  }
+}
+
+// ── Load Members (owner) ──────────────────────────────────────────
+async function loadMembers() {
+  members = [];
+  try {
+    const snap = await db.collection('members').orderBy('memberId').get();
+    snap.forEach(d => members.push({ docId: d.id, ...d.data() }));
+  } catch(e) {
+    // orderBy might fail without index — fallback
+    try {
+      const snap2 = await db.collection('members').get();
+      snap2.forEach(d => members.push({ docId: d.id, ...d.data() }));
+      members.sort((a,b) => (a.memberId||'').localeCompare(b.memberId||''));
+    } catch(e2) { console.error('loadMembers error:', e2); }
+  }
+}
+
+// ── Load Member's own data ────────────────────────────────────────
+async function loadMemberData() {
+  try {
+    const snap = await db.collection('members').doc(currentProfile.memberId).get();
+    if (snap.exists) {
+      window._memberRoutine = snap.data().routine || {};
+    }
+  } catch(e) { console.error('loadMemberData error:', e); }
+}
+
+// ── Nav ───────────────────────────────────────────────────────────
+function buildNav() {
+  const items = currentProfile.role === 'owner'
+    ? [['dashboard','⚡','Dashboard'],['members','👥','Members'],['add','➕','Add Member'],['routines','📋','Routines']]
+    : [['member-dash','⚡','Dashboard'],['routine','📋','My Routine']];
+
+  const sn = document.getElementById('sidebar-nav');
+  sn.innerHTML = '';
+  items.forEach(([id, icon, label]) => {
+    const btn = document.createElement('button');
+    btn.className = 'nav-item';
+    btn.innerHTML = `<span class="nav-icon">${icon}</span>${label}`;
+    btn.onclick = () => { setView(id); loadView(id); closeDrawer(); };
+    btn.dataset.view = id;
+    sn.appendChild(btn);
+  });
+
+  const bn = document.getElementById('bottom-nav-inner');
+  bn.innerHTML = '';
+  items.forEach(([id, icon, label]) => {
+    const btn = document.createElement('button');
+    btn.className = 'bn-item';
+    btn.innerHTML = `<span class="bn-icon">${icon}</span>${label}`;
+    btn.onclick = () => { setView(id); loadView(id); };
+    btn.dataset.view = id;
+    bn.appendChild(btn);
+  });
+}
+
+function setView(id) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-item,.bn-item').forEach(b => b.classList.remove('active'));
+  const v = document.getElementById('view-' + id);
+  if (v) v.classList.add('active');
+  document.querySelectorAll('[data-view="' + id + '"]').forEach(b => b.classList.add('active'));
+}
+
+async function loadView(id) {
+  if      (id === 'dashboard')   { await loadMembers(); loadOwnerDash(); }
+  else if (id === 'members')     { await loadMembers(); loadAllMembers(); }
+  else if (id === 'routines')    { await loadMembers(); loadRoutineEditors(); }
+  else if (id === 'member-dash') { await loadMemberData(); loadMemberDash(); }
+  else if (id === 'routine')     { await loadMemberData(); loadMemberRoutine(); }
+}
+
+// ── Drawer ────────────────────────────────────────────────────────
+function toggleDrawer() {
+  const s = document.getElementById('sidebar');
+  const o = document.getElementById('drawer-overlay');
+  const h = document.getElementById('hamburger');
+  const open = s.classList.toggle('open');
+  o.classList.toggle('show', open);
+  h.classList.toggle('open', open);
+}
+function closeDrawer() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('drawer-overlay').classList.remove('show');
+  document.getElementById('hamburger').classList.remove('open');
+}
+
+// ── Owner Dashboard ───────────────────────────────────────────────
+function loadOwnerDash() {
+  document.getElementById('dash-sub').textContent = `Welcome back, ${currentProfile.name}! Here's your gym overview.`;
+  const prem  = members.filter(m => m.plan === 'Premium').length;
+  const basic = members.filter(m => m.plan === 'Basic').length;
+  document.getElementById('dash-stats').innerHTML = `
+    <div class="stat-card"><div class="stat-card-num">${members.length}</div><div class="stat-card-label">Total Members</div></div>
+    <div class="stat-card"><div class="stat-card-num">${prem}</div><div class="stat-card-label">Premium</div></div>
+    <div class="stat-card"><div class="stat-card-num">${basic}</div><div class="stat-card-label">Basic</div></div>
+    <div class="stat-card"><div class="stat-card-num">${today.slice(0,3)}</div><div class="stat-card-label">Today</div></div>`;
+  document.getElementById('recent-tbody').innerHTML = [...members].reverse().slice(0,5).map(m => `
+    <tr>
+      <td><span class="id-chip">${m.memberId||''}</span></td>
+      <td>${m.name}</td>
+      <td><span class="badge badge-${(m.plan||'basic').toLowerCase()}">${m.plan||'Basic'}</span></td>
+      <td class="hide-sm" style="color:var(--muted)">${m.joinDate||''}</td>
+    </tr>`).join('');
+}
+
+// ── All Members ───────────────────────────────────────────────────
+function loadAllMembers() {
+  document.getElementById('members-sub').textContent = `${members.length} registered members`;
+  document.getElementById('all-tbody').innerHTML = members.map(m => `
+    <tr>
+      <td><span class="id-chip">${m.memberId||''}</span></td>
+      <td style="font-weight:500">${m.name}</td>
+      <td class="hide-sm" style="color:var(--muted);font-size:12px">${m.email||''}</td>
+      <td><span class="badge badge-${(m.plan||'basic').toLowerCase()}">${m.plan||'Basic'}</span></td>
+      <td class="hide-sm" style="color:var(--muted);font-size:12px">${m.joinDate||''}</td>
+      <td style="display:flex;gap:6px">
+        <button class="btn-secondary" onclick="quickEditRoutine('${m.docId}')">✏️ Routine</button>
+        <button class="btn-danger" onclick="removeMember('${m.docId}','${m.authUid||''}')">Remove</button>
+      </td>
+    </tr>`).join('');
+  document.getElementById('member-cards-list').innerHTML = members.map(m => `
+    <div class="member-card">
+      <div class="mc-avatar">${(m.name||'?')[0]}</div>
+      <div class="mc-info">
+        <div class="mc-name">${m.name}</div>
+        <div class="mc-meta"><span class="id-chip">${m.memberId||''}</span> · ${m.email||''}</div>
+      </div>
+      <div class="mc-right">
+        <span class="badge badge-${(m.plan||'basic').toLowerCase()}">${m.plan||'Basic'}</span>
+        <div style="display:flex;gap:6px;margin-top:4px">
+          <button class="btn-secondary" onclick="quickEditRoutine('${m.docId}')">✏️</button>
+          <button class="btn-danger" onclick="removeMember('${m.docId}','${m.authUid||''}')">✕</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+async function removeMember(docId, authUid) {
+  if (!confirm('Remove this member from Firestore?')) return;
+  try {
+    await db.collection('members').doc(docId).delete();
+    if (authUid) await db.collection('users').doc(authUid).delete();
+    await loadMembers();
+    loadAllMembers();
+    loadOwnerDash();
+  } catch(e) { alert('Error removing: ' + e.message); }
+}
+
+// ── Add Member ────────────────────────────────────────────────────
+async function addMember() {
+  const name     = document.getElementById('f-name').value.trim();
+  const email    = document.getElementById('f-email').value.trim();
+  const phone    = document.getElementById('f-phone').value.trim();
+  const plan     = document.getElementById('f-plan').value;
+  const pass     = document.getElementById('f-pass').value.trim();
+  const manualId = document.getElementById('f-memberid').value.trim();
+
+  document.getElementById('add-error').style.display   = 'none';
+  document.getElementById('add-success').style.display = 'none';
+
+  if (!name || !email || !pass) { showErr('add-error','Please fill in Name, Email and Password.'); return; }
+  if (pass.length < 6)          { showErr('add-error','Password must be at least 6 characters.'); return; }
+
+  const memberId = manualId || (() => {
+    const max = members.reduce((m, x) => Math.max(m, parseInt((x.memberId||'M000').replace('M',''))||0), 0);
+    return 'M' + String(max + 1).padStart(3,'0');
+  })();
+
+  setAddLoading(true);
+
+  // Save owner credentials before creating new user (Firebase switches session)
+  const ownerEmail = currentUser.email;
+  const ownerPass  = document.getElementById('_owner_pass_cache') ? document.getElementById('_owner_pass_cache').value : null;
+
+  try {
+    // Create Firebase Auth account for member
+    const cred = await auth.createUserWithEmailAndPassword(email, pass);
+    const uid  = cred.user.uid;
+    const joinDate = new Date().toISOString().split('T')[0];
+
+    const memberData = { authUid:uid, memberId, name, email, phone, plan, joinDate, routine:DEFAULT_ROUTINE };
+
+    // Save to Firestore
+    await db.collection('members').doc(memberId).set(memberData);
+    await db.collection('users').doc(uid).set({ name, email, role:'member', memberId });
+
+    // Show credentials
+    document.getElementById('cred-name').textContent  = name;
+    document.getElementById('cred-id').textContent    = memberId;
+    document.getElementById('cred-email').textContent = email;
+    document.getElementById('cred-pass').textContent  = pass;
+    document.getElementById('cred-box').style.display = 'block';
+
+    const suc = document.getElementById('add-success');
+    suc.textContent = `✅ Member "${name}" (${memberId}) created in Firebase!`;
+    suc.style.display = 'block';
+    ['f-name','f-email','f-phone','f-pass','f-memberid'].forEach(id => document.getElementById(id).value = '');
+    setTimeout(() => suc.style.display = 'none', 8000);
+
+    members.push({ docId: memberId, ...memberData });
+
+    // Sign back in as owner automatically
+    await auth.signInWithEmailAndPassword(ownerEmail, _ownerPassCache);
+
+  } catch(e) {
+    const msgs = {
+      'auth/email-already-in-use':'This email is already registered.',
+      'auth/weak-password':'Password must be at least 6 characters.',
+    };
+    showErr('add-error', msgs[e.code] || e.message);
+  } finally {
+    setAddLoading(false);
+  }
+}
+
+// Cache owner password on login so we can re-sign in after creating a member
+let _ownerPassCache = '';
+document.getElementById('login-pass').addEventListener('input', e => { _ownerPassCache = e.target.value; });
+
+function setAddLoading(on) {
+  document.getElementById('add-btn').disabled = on;
+  document.getElementById('add-btn-text').textContent = on ? 'Creating…' : 'ADD MEMBER →';
+  document.getElementById('add-spinner').classList.toggle('show', on);
+}
+function showErr(elId, msg) {
+  const el = document.getElementById(elId); el.textContent = msg; el.style.display = 'block';
+}
+
+// ── Routine Editors ───────────────────────────────────────────────
+function loadRoutineEditors() {
+  const container = document.getElementById('routine-editors');
+  if (members.length === 0) {
+    container.innerHTML = '<div class="card" style="color:var(--muted);text-align:center;padding:40px">No members yet. Add members first.</div>';
+    return;
+  }
+  container.innerHTML = members.map(m => `
+    <div class="routine-editor" id="re-${m.docId}">
+      <div class="re-header" onclick="toggleEditor('${m.docId}')">
+        <div class="re-member-info">
+          <div class="re-avatar">${(m.name||'?')[0]}</div>
+          <div>
+            <div class="re-name">${m.name}</div>
+            <div class="re-id"><span class="id-chip">${m.memberId||''}</span> &nbsp;<span class="badge badge-${(m.plan||'basic').toLowerCase()}">${m.plan||'Basic'}</span></div>
+          </div>
+        </div>
+        <span class="re-toggle" id="re-toggle-${m.docId}">▼</span>
+      </div>
+      <div class="re-body" id="re-body-${m.docId}">
+        ${DAYS.map(day => `
+          <div class="day-row">
+            <div class="day-label">${day}${day===today ? '<span class="today-badge">TODAY</span>' : ''}</div>
+            <textarea class="day-input" id="inp-${m.docId}-${day}" rows="2"
+              placeholder="Enter workout for ${day}...">${(m.routine && m.routine[day])||''}</textarea>
+          </div>`).join('')}
+        <div class="re-footer">
+          <button class="re-save-btn" id="save-btn-${m.docId}" onclick="saveRoutine('${m.docId}')">SAVE TO FIREBASE</button>
+          <span class="save-ok" id="save-ok-${m.docId}">✅ Saved!</span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function toggleEditor(id) {
+  const body   = document.getElementById('re-body-' + id);
+  const toggle = document.getElementById('re-toggle-' + id);
+  const open   = body.classList.toggle('open');
+  toggle.style.transform = open ? 'rotate(180deg)' : 'rotate(0deg)';
+}
+
+async function saveRoutine(docId) {
+  const m = members.find(x => x.docId === docId);
+  if (!m) return;
+  const routine = {};
+  DAYS.forEach(day => {
+    const inp = document.getElementById('inp-' + docId + '-' + day);
+    if (inp) routine[day] = inp.value.trim();
+  });
+  const btn = document.getElementById('save-btn-' + docId);
+  btn.disabled = true; btn.textContent = 'Saving…';
+  try {
+    await db.collection('members').doc(docId).update({ routine });
+    m.routine = routine;
+    const ok = document.getElementById('save-ok-' + docId);
+    ok.classList.add('show');
+    setTimeout(() => ok.classList.remove('show'), 3000);
+  } catch(e) {
+    alert('Error saving: ' + e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = 'SAVE TO FIREBASE';
+  }
+}
+
+async function quickEditRoutine(docId) {
+  setView('routines');
+  await loadMembers();
+  loadRoutineEditors();
+  document.querySelectorAll('.nav-item,.bn-item').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('[data-view="routines"]').forEach(b => b.classList.add('active'));
+  setTimeout(() => {
+    const body   = document.getElementById('re-body-' + docId);
+    const toggle = document.getElementById('re-toggle-' + docId);
+    if (body && !body.classList.contains('open')) {
+      body.classList.add('open');
+      if (toggle) toggle.style.transform = 'rotate(180deg)';
+    }
+    const el = document.getElementById('re-' + docId);
+    if (el) el.scrollIntoView({ behavior:'smooth', block:'start' });
+  }, 120);
+}
+
+// ── Member Dashboard ──────────────────────────────────────────────
+function loadMemberDash() {
+  const profile = currentProfile;
+  const routine = window._memberRoutine || {};
+  document.getElementById('member-dash-sub').textContent = `${profile.name} · ID: ${profile.memberId||''}`;
+  document.getElementById('member-stats').innerHTML = `
+    <div class="stat-card"><div class="stat-card-num">${today.slice(0,3)}</div><div class="stat-card-label">Today</div></div>
+    <div class="stat-card"><div class="stat-card-num">7</div><div class="stat-card-label">Routines</div></div>`;
+  document.getElementById('today-card-title').textContent  = `TODAY — ${today.toUpperCase()}`;
+  document.getElementById('today-workout-text').textContent = routine[today] || 'Rest day — enjoy your recovery!';
+}
+
+// ── Member Routine View ───────────────────────────────────────────
+function loadMemberRoutine() {
+  const routine = window._memberRoutine || {};
+  document.getElementById('routine-grid').innerHTML = DAYS.map(day => `
+    <div class="routine-day-card ${day===today?'today':''}">
+      <div class="routine-day-label">${day}${day===today?'<span class="today-tag">Today</span>':''}</div>
+      <div class="routine-day-text">${routine[day]||'Rest'}</div>
+    </div>`).join('');
+}
+
+// ── Notification ──────────────────────────────────────────────────
+function showNotif() {
+  const routine = window._memberRoutine || {};
+  document.getElementById('notif-day-badge').textContent    = `Today • ${today}`;
+  document.getElementById('notif-routine-text').textContent = routine[today] || 'Rest day — enjoy your recovery!';
+  document.getElementById('notif-tip').textContent          = TIPS[Math.floor(Math.random() * TIPS.length)];
+  document.getElementById('notif-overlay').classList.add('show');
+}
+function closeNotif() { document.getElementById('notif-overlay').classList.remove('show'); }
+
+// ── Page Utils ────────────────────────────────────────────────────
+function showPage(name) {
+  document.getElementById('login-page').classList.remove('active');
+  document.getElementById('app-page').classList.remove('active');
+  if (name === 'login') document.getElementById('login-page').classList.add('active');
+  if (name === 'app')   document.getElementById('app-page').classList.add('active');
+}
+</script>
+</body>
+</html>
