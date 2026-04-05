@@ -14,14 +14,38 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 .view{display:none;}.view.active{display:block;}
 /* LOGIN */
 #login-page{min-height:100vh;flex-direction:row;}
-.login-brand{flex:1;background:var(--accent);display:flex;flex-direction:column;justify-content:center;padding:60px;position:relative;overflow:hidden;}
-.login-brand::after{content:'ABC';position:absolute;font-family:'Bebas Neue',sans-serif;font-size:200px;color:rgba(0,0,0,.05);bottom:-20px;right:-10px;line-height:1;pointer-events:none;}
-.brand-logo{font-family:'Bebas Neue',sans-serif;font-size:80px;color:#000;line-height:.9;letter-spacing:3px;}
-.brand-tagline{font-size:17px;color:#333;margin-top:16px;font-weight:500;line-height:1.5;}
-.login-form-side{flex:1;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:60px 48px;}
-.login-box{width:100%;max-width:380px;}
+.login-brand{
+  flex:1.1;background:#0d0d0d;border-right:1px solid #222;display:flex;flex-direction:column;
+  justify-content:flex-start;padding:32px 28px;overflow-y:auto;overflow-x:hidden;
+  max-height:100vh;
+}
+.lb-top{margin-bottom:20px;}
+.brand-logo{font-family:'Bebas Neue',sans-serif;font-size:56px;color:var(--accent);line-height:.9;letter-spacing:3px;}
+.brand-logo span{color:#fff;}
+.brand-tag{font-size:11px;font-weight:700;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin:6px 0 8px;}
+.brand-tagline{font-size:14px;color:#555;line-height:1.6;}
+.lb-rating{display:flex;align-items:center;gap:10px;margin-bottom:18px;padding:10px 14px;background:#161616;border:1px solid #2a2a2a;border-radius:10px;}
+.stars{color:#facc15;font-size:16px;letter-spacing:2px;}
+.rating-num{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--accent);line-height:1;}
+.rating-count{font-size:12px;color:var(--muted);}
+.info-cards{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
+.info-card{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:#161616;border:1px solid #222;border-radius:9px;transition:border-color .2s;}
+.info-card:hover{border-color:#333;}
+.info-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+.info-label{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:2px;font-weight:600;}
+.info-val{font-size:12px;color:#ccc;line-height:1.5;}
+.map-wrap{border-radius:10px;overflow:hidden;height:170px;margin-bottom:14px;border:1px solid #2a2a2a;}
+.map-wrap iframe{width:100%;height:100%;border:none;display:block;}
+.review-strip{padding:12px 14px;background:linear-gradient(135deg,#1a1a0a,#111);border:1px solid #333;border-left:3px solid var(--accent);border-radius:0 9px 9px 0;}
+.review-quote{font-size:12px;color:#aaa;line-height:1.6;font-style:italic;margin-bottom:5px;}
+.review-author{font-size:11px;color:var(--accent);font-weight:600;}
+.login-form-side{flex:1;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:40px 36px;}
+.login-box{width:100%;max-width:360px;}
+.login-logo-mobile{display:none;font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;color:var(--accent);margin-bottom:20px;}
+.login-logo-mobile span{color:#fff;}
 .login-title{font-family:'Bebas Neue',sans-serif;font-size:40px;letter-spacing:2px;margin-bottom:8px;}
-.login-sub{color:var(--muted);font-size:14px;margin-bottom:20px;}
+.login-sub{color:var(--muted);font-size:14px;margin-bottom:18px;}
+.login-footer{display:flex;justify-content:space-between;margin-top:20px;padding-top:16px;border-top:1px solid #1e1e1e;font-size:11px;color:#444;flex-wrap:wrap;gap:6px;}
 .fb-badge{display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--surface2);border-radius:8px;font-size:13px;color:var(--muted);margin-bottom:18px;}
 .fb-dot{width:8px;height:8px;border-radius:50%;background:#f59e0b;flex-shrink:0;transition:background .3s;}
 .fb-dot.ready{background:#22c55e;}
@@ -177,10 +201,11 @@ tr:hover td{background:var(--surface2);}
 /* RESPONSIVE */
 @media(max-width:768px){
   #login-page{flex-direction:column;}
-  .login-brand{padding:30px 22px;flex:none;}
-  .login-brand::after{font-size:120px;}
-  .brand-logo{font-size:50px;}
-  .login-form-side{padding:22px 16px 34px;}
+  .login-brand{max-height:none;padding:20px 16px;flex:none;border-right:none;border-bottom:1px solid #222;}
+  .brand-logo{font-size:40px;}
+  .map-wrap{height:140px;}
+  .login-logo-mobile{display:block;}
+  .login-form-side{padding:20px 16px 34px;}
   .mobile-topbar{display:flex;}
   .sidebar{transform:translateX(-100%);}
   .sidebar.open{transform:translateX(0);}
@@ -205,14 +230,77 @@ tr:hover td{background:var(--surface2);}
 
 <!-- LOGIN PAGE -->
 <div id="login-page" class="page active">
+
+  <!-- LEFT: Gym Info Panel -->
   <div class="login-brand">
-    <div class="brand-logo">ABC<br>3.0</div>
-    <div class="brand-tagline">Train harder. Track smarter. Build your best body.</div>
+    <!-- Logo + tagline -->
+    <div class="lb-top">
+      <div class="brand-logo">ABC<br><span>3.0</span></div>
+      <div class="brand-tag">UNISEX GYM</div>
+      <div class="brand-tagline">Train harder. Track smarter.<br>Build your best body.</div>
+    </div>
+
+    <!-- Rating -->
+    <div class="lb-rating">
+      <div class="stars">★★★★★</div>
+      <div class="rating-num">4.9</div>
+      <div class="rating-count">112 reviews</div>
+    </div>
+
+    <!-- Info cards -->
+    <div class="info-cards">
+      <div class="info-card">
+        <div class="info-icon">📍</div>
+        <div class="info-text">
+          <div class="info-label">Address</div>
+          <div class="info-val">First Floor, Plot 95, Parijat Nagar, Sector N-4, CIDCO, Chhatrapati Sambhajinagar</div>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">📞</div>
+        <div class="info-text">
+          <div class="info-label">Phone</div>
+          <div class="info-val">+91 80871 21411</div>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">🕐</div>
+        <div class="info-text">
+          <div class="info-label">Hours (Mon–Sat)</div>
+          <div class="info-val">6:00–10:30 AM &nbsp;|&nbsp; 5:00–10:00 PM</div>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">📅</div>
+        <div class="info-text">
+          <div class="info-label">Sunday</div>
+          <div class="info-val">8:00–10:30 AM only</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Map embed -->
+    <div class="map-wrap">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3752.5!2d75.3645433!3d19.8630367!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bdba361f9f0f1b7%3A0x4b84559d2e087ae6!2sABC%203.0%20UNISEXGYM!5e0!3m2!1sen!2sin!4v1712000000000!5m2!1sen!2sin"
+        allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+
+    <!-- Review snippet -->
+    <div class="review-strip">
+      <div class="review-quote">"Best gym experience with a highly professional trainer — very motivating! Excellent equipment and clean environment."</div>
+      <div class="review-author">— Google Review ⭐⭐⭐⭐⭐</div>
+    </div>
+
   </div>
+
+  <!-- RIGHT: Login Form -->
   <div class="login-form-side">
     <div class="login-box">
+      <div class="login-logo-mobile">ABC <span>3.0</span> GYM</div>
       <div class="login-title">SIGN IN</div>
-      <div class="login-sub">Enter your email and password</div>
+      <div class="login-sub">Welcome back — enter your credentials</div>
       <div class="fb-badge" id="fb-badge">
         <div class="fb-dot" id="fb-dot"></div>
         <span id="fb-msg">Connecting to server…</span>
@@ -221,8 +309,14 @@ tr:hover td{background:var(--surface2);}
       <div class="field"><label>Email</label><input id="login-email" type="email" placeholder="you@email.com" autocomplete="email"/></div>
       <div class="field"><label>Password</label><input id="login-pass" type="password" placeholder="Your password" autocomplete="current-password"/></div>
       <button class="btn-primary" id="login-btn" onclick="doLogin()" disabled>LOGIN →</button>
+      <div class="login-footer">
+        <span>⭐ 4.9 Rating</span>
+        <span>💪 Unisex Gym</span>
+        <span>📍 CIDCO, Aurangabad</span>
+      </div>
     </div>
   </div>
+
 </div>
 
 <!-- NOTIFICATION MODAL -->
@@ -884,13 +978,19 @@ function loadMemberAttLog() {
   var el = document.getElementById('member-att-log');
   if (!el) return;
   el.innerHTML = '<div class="empty-state">Loading...</div>';
-  db.collection('attendance').where('memberId','==',currentProfile.memberId).orderBy('timestamp','desc').limit(60).get().then(function(s){
+  // No orderBy = no composite index needed. Sort in JS.
+  db.collection('attendance').where('memberId','==',currentProfile.memberId).get().then(function(s){
     if (s.empty) { el.innerHTML='<div class="empty-state">No attendance yet — scan the QR at entrance!</div>'; return; }
-    var rows=[]; s.forEach(function(d){ rows.push(d.data()); });
-    el.innerHTML = rows.map(function(r){
-      return '<div class="att-row"><div><div style="font-weight:600">' + r.date + '</div><div style="font-size:12px;color:var(--muted)">' + (r.time||'') + '</div></div><span class="att-badge">✓ Present</span></div>';
+    var rows=[];
+    s.forEach(function(d){ rows.push(d.data()); });
+    rows.sort(function(a,b){ return (b.timestamp||0)-(a.timestamp||0); });
+    el.innerHTML = rows.slice(0,60).map(function(r){
+      return '<div class="att-row"><div><div style="font-weight:600">' + (r.date||'') + '</div><div style="font-size:12px;color:var(--muted)">' + (r.time||'') + '</div></div><span class="att-badge">✓ Present</span></div>';
     }).join('');
-  }).catch(function(e){ el.innerHTML='<div class="empty-state">Error. Add Firestore composite index for attendance.</div>'; console.error(e); });
+  }).catch(function(e){
+    el.innerHTML='<div class="empty-state">Error: ' + e.message + '</div>';
+    console.error(e);
+  });
 }
 function toggleMemberScanner() { if (scannerOn) stopMemberScanner(); else startMemberScanner(); }
 function startMemberScanner() {
