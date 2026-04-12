@@ -14,38 +14,14 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 .view{display:none;}.view.active{display:block;}
 /* LOGIN */
 #login-page{min-height:100vh;flex-direction:row;}
-.login-brand{
-  flex:1.1;background:#0d0d0d;border-right:1px solid #222;display:flex;flex-direction:column;
-  justify-content:flex-start;padding:32px 28px;overflow-y:auto;overflow-x:hidden;
-  max-height:100vh;
-}
-.lb-top{margin-bottom:20px;}
-.brand-logo{font-family:'Bebas Neue',sans-serif;font-size:56px;color:var(--accent);line-height:.9;letter-spacing:3px;}
-.brand-logo span{color:#fff;}
-.brand-tag{font-size:11px;font-weight:700;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin:6px 0 8px;}
-.brand-tagline{font-size:14px;color:#555;line-height:1.6;}
-.lb-rating{display:flex;align-items:center;gap:10px;margin-bottom:18px;padding:10px 14px;background:#161616;border:1px solid #2a2a2a;border-radius:10px;}
-.stars{color:#facc15;font-size:16px;letter-spacing:2px;}
-.rating-num{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--accent);line-height:1;}
-.rating-count{font-size:12px;color:var(--muted);}
-.info-cards{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
-.info-card{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:#161616;border:1px solid #222;border-radius:9px;transition:border-color .2s;}
-.info-card:hover{border-color:#333;}
-.info-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
-.info-label{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:2px;font-weight:600;}
-.info-val{font-size:12px;color:#ccc;line-height:1.5;}
-.map-wrap{border-radius:10px;overflow:hidden;height:170px;margin-bottom:14px;border:1px solid #2a2a2a;}
-.map-wrap iframe{width:100%;height:100%;border:none;display:block;}
-.review-strip{padding:12px 14px;background:linear-gradient(135deg,#1a1a0a,#111);border:1px solid #333;border-left:3px solid var(--accent);border-radius:0 9px 9px 0;}
-.review-quote{font-size:12px;color:#aaa;line-height:1.6;font-style:italic;margin-bottom:5px;}
-.review-author{font-size:11px;color:var(--accent);font-weight:600;}
-.login-form-side{flex:1;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:40px 36px;}
-.login-box{width:100%;max-width:360px;}
-.login-logo-mobile{display:none;font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;color:var(--accent);margin-bottom:20px;}
-.login-logo-mobile span{color:#fff;}
+.login-brand{flex:1;background:var(--accent);display:flex;flex-direction:column;justify-content:center;padding:60px;position:relative;overflow:hidden;}
+.login-brand::after{content:'ABC';position:absolute;font-family:'Bebas Neue',sans-serif;font-size:200px;color:rgba(0,0,0,.05);bottom:-20px;right:-10px;line-height:1;pointer-events:none;}
+.brand-logo{font-family:'Bebas Neue',sans-serif;font-size:80px;color:#000;line-height:.9;letter-spacing:3px;}
+.brand-tagline{font-size:17px;color:#333;margin-top:16px;font-weight:500;line-height:1.5;}
+.login-form-side{flex:1;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:60px 48px;}
+.login-box{width:100%;max-width:380px;}
 .login-title{font-family:'Bebas Neue',sans-serif;font-size:40px;letter-spacing:2px;margin-bottom:8px;}
-.login-sub{color:var(--muted);font-size:14px;margin-bottom:18px;}
-.login-footer{display:flex;justify-content:space-between;margin-top:20px;padding-top:16px;border-top:1px solid #1e1e1e;font-size:11px;color:#444;flex-wrap:wrap;gap:6px;}
+.login-sub{color:var(--muted);font-size:14px;margin-bottom:20px;}
 .fb-badge{display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--surface2);border-radius:8px;font-size:13px;color:var(--muted);margin-bottom:18px;}
 .fb-dot{width:8px;height:8px;border-radius:50%;background:#f59e0b;flex-shrink:0;transition:background .3s;}
 .fb-dot.ready{background:#22c55e;}
@@ -198,40 +174,13 @@ tr:hover td{background:var(--surface2);}
 .rev-row:hover{background:var(--surface2);}
 .rev-amount{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--accent);}
 .empty-state{text-align:center;padding:34px 20px;color:var(--muted);font-size:14px;}
-/* NOTIFICATIONS */
-.notif-send-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px;}
-.notif-type-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
-.notif-type-btn{padding:8px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--muted);cursor:pointer;transition:all .2s;}
-.notif-type-btn.active{background:var(--accent);color:#000;border-color:var(--accent);font-weight:600;}
-.notif-member-select{width:100%;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:14px;outline:none;margin-bottom:12px;display:none;}
-.notif-member-select.show{display:block;}
-.notif-history-item{padding:12px 14px;border-bottom:1px solid var(--border);font-size:13px;}
-.notif-history-item:last-child{border-bottom:none;}
-.notif-history-item:hover{background:var(--surface2);}
-.nh-title{font-weight:600;margin-bottom:3px;}
-.nh-body{color:var(--muted);font-size:12px;margin-bottom:4px;}
-.nh-meta{font-size:11px;color:#444;display:flex;gap:10px;}
-.nh-badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600;background:rgba(232,255,0,.12);color:var(--accent);}
-.push-status{display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--surface2);border-radius:8px;font-size:13px;margin-bottom:14px;}
-.push-dot{width:8px;height:8px;border-radius:50%;background:#f59e0b;flex-shrink:0;}
-.push-dot.on{background:#22c55e;}
-.push-dot.off{background:var(--accent2);}
-.member-notif-item{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:10px;}
-.member-notif-item:last-child{border-bottom:none;}
-.member-notif-item.unread{background:rgba(232,255,0,.04);border-left:3px solid var(--accent);}
-.mn-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
-.mn-title{font-weight:600;font-size:14px;margin-bottom:2px;}
-.mn-body{font-size:13px;color:var(--muted);}
-.mn-time{font-size:11px;color:#444;margin-top:4px;}
-.unread-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-left:6px;vertical-align:middle;}
 /* RESPONSIVE */
 @media(max-width:768px){
   #login-page{flex-direction:column;}
-  .login-brand{max-height:none;padding:20px 16px;flex:none;border-right:none;border-bottom:1px solid #222;}
-  .brand-logo{font-size:40px;}
-  .map-wrap{height:140px;}
-  .login-logo-mobile{display:block;}
-  .login-form-side{padding:20px 16px 34px;}
+  .login-brand{padding:30px 22px;flex:none;}
+  .login-brand::after{font-size:120px;}
+  .brand-logo{font-size:50px;}
+  .login-form-side{padding:22px 16px 34px;}
   .mobile-topbar{display:flex;}
   .sidebar{transform:translateX(-100%);}
   .sidebar.open{transform:translateX(0);}
@@ -256,77 +205,14 @@ tr:hover td{background:var(--surface2);}
 
 <!-- LOGIN PAGE -->
 <div id="login-page" class="page active">
-
-  <!-- LEFT: Gym Info Panel -->
   <div class="login-brand">
-    <!-- Logo + tagline -->
-    <div class="lb-top">
-      <div class="brand-logo">ABC<br><span>3.0</span></div>
-      <div class="brand-tag">UNISEX GYM</div>
-      <div class="brand-tagline">Train harder. Track smarter.<br>Build your best body.</div>
-    </div>
-
-    <!-- Rating -->
-    <div class="lb-rating">
-      <div class="stars">★★★★★</div>
-      <div class="rating-num">4.9</div>
-      <div class="rating-count">112 reviews</div>
-    </div>
-
-    <!-- Info cards -->
-    <div class="info-cards">
-      <div class="info-card">
-        <div class="info-icon">📍</div>
-        <div class="info-text">
-          <div class="info-label">Address</div>
-          <div class="info-val">First Floor, Plot 95, Parijat Nagar, Sector N-4, CIDCO, Chhatrapati Sambhajinagar</div>
-        </div>
-      </div>
-      <div class="info-card">
-        <div class="info-icon">📞</div>
-        <div class="info-text">
-          <div class="info-label">Phone</div>
-          <div class="info-val">+91 80871 21411</div>
-        </div>
-      </div>
-      <div class="info-card">
-        <div class="info-icon">🕐</div>
-        <div class="info-text">
-          <div class="info-label">Hours (Mon–Sat)</div>
-          <div class="info-val">6:00–10:30 AM &nbsp;|&nbsp; 5:00–10:00 PM</div>
-        </div>
-      </div>
-      <div class="info-card">
-        <div class="info-icon">📅</div>
-        <div class="info-text">
-          <div class="info-label">Sunday</div>
-          <div class="info-val">8:00–10:30 AM only</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Map embed -->
-    <div class="map-wrap">
-      <iframe
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3752.5!2d75.3645433!3d19.8630367!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bdba361f9f0f1b7%3A0x4b84559d2e087ae6!2sABC%203.0%20UNISEXGYM!5e0!3m2!1sen!2sin!4v1712000000000!5m2!1sen!2sin"
-        allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-      </iframe>
-    </div>
-
-    <!-- Review snippet -->
-    <div class="review-strip">
-      <div class="review-quote">"Best gym experience with a highly professional trainer — very motivating! Excellent equipment and clean environment."</div>
-      <div class="review-author">— Google Review ⭐⭐⭐⭐⭐</div>
-    </div>
-
+    <div class="brand-logo">ABC<br>3.0</div>
+    <div class="brand-tagline">Train harder. Track smarter. Build your best body.</div>
   </div>
-
-  <!-- RIGHT: Login Form -->
   <div class="login-form-side">
     <div class="login-box">
-      <div class="login-logo-mobile">ABC <span>3.0</span> GYM</div>
       <div class="login-title">SIGN IN</div>
-      <div class="login-sub">Welcome back — enter your credentials</div>
+      <div class="login-sub">Enter your email and password</div>
       <div class="fb-badge" id="fb-badge">
         <div class="fb-dot" id="fb-dot"></div>
         <span id="fb-msg">Connecting to server…</span>
@@ -335,14 +221,8 @@ tr:hover td{background:var(--surface2);}
       <div class="field"><label>Email</label><input id="login-email" type="email" placeholder="you@email.com" autocomplete="email"/></div>
       <div class="field"><label>Password</label><input id="login-pass" type="password" placeholder="Your password" autocomplete="current-password"/></div>
       <button class="btn-primary" id="login-btn" onclick="doLogin()" disabled>LOGIN →</button>
-      <div class="login-footer">
-        <span>⭐ 4.9 Rating</span>
-        <span>💪 Unisex Gym</span>
-        <span>📍 CIDCO, Aurangabad</span>
-      </div>
     </div>
   </div>
-
 </div>
 
 <!-- NOTIFICATION MODAL -->
@@ -489,59 +369,6 @@ tr:hover td{background:var(--surface2);}
       </div>
     </div>
 
-    <!-- OWNER: Notifications -->
-    <div class="view" id="view-notifications">
-      <div class="page-header"><div class="page-title">NOTIFICATIONS</div><div class="page-sub">Send push notifications to members</div></div>
-
-      <!-- Push permission status -->
-      <div class="push-status" id="push-status-bar">
-        <div class="push-dot" id="push-dot"></div>
-        <span id="push-status-msg">Checking push notification permission…</span>
-      </div>
-
-      <!-- Send notification -->
-      <div class="notif-send-box">
-        <div class="card-title" style="margin-bottom:14px">📤 SEND NOTIFICATION</div>
-        <div class="notif-type-row">
-          <button class="notif-type-btn active" id="ntype-all" onclick="setNotifType('all')">📢 All Members</button>
-          <button class="notif-type-btn" id="ntype-one" onclick="setNotifType('one')">👤 One Member</button>
-          <button class="notif-type-btn" id="ntype-multi" onclick="setNotifType('multi')">👥 Multiple</button>
-        </div>
-        <select id="notif-member-select" class="notif-member-select"><option value="">Select member...</option></select>
-        <div id="notif-multi-list" style="display:none;margin-bottom:12px;max-height:160px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;"></div>
-        <div class="field"><label>Notification Title</label><input id="notif-title-inp" placeholder="e.g. Routine Updated!" maxlength="60"/></div>
-        <div class="field"><label>Message</label><textarea id="notif-body-inp" placeholder="Write your message here…" rows="3" maxlength="200"></textarea></div>
-        <div class="error-msg" id="notif-send-error"></div>
-        <div class="success-banner" id="notif-send-success" style="display:none"></div>
-        <button class="btn-add" id="notif-send-btn" onclick="sendNotification()">SEND NOTIFICATION 🔔</button>
-      </div>
-
-      <!-- Notification history -->
-      <div class="card">
-        <div class="card-title">SENT HISTORY</div>
-        <div id="notif-history"><div class="empty-state">No notifications sent yet</div></div>
-      </div>
-    </div>
-
-    <!-- MEMBER: Notifications -->
-    <div class="view" id="view-member-notifs">
-      <div class="page-header">
-        <div class="page-title">NOTIFICATIONS</div>
-        <div class="page-sub">Messages from your gym</div>
-      </div>
-      <div class="push-status" id="member-push-bar">
-        <div class="push-dot" id="member-push-dot"></div>
-        <span id="member-push-msg">Checking notification permission…</span>
-      </div>
-      <div class="card">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:13px">
-          <div class="card-title" style="margin:0">INBOX</div>
-          <button class="btn-sm" onclick="markAllRead()">Mark all read</button>
-        </div>
-        <div id="member-notif-list"><div class="empty-state">No notifications yet</div></div>
-      </div>
-    </div>
-
     <!-- MEMBER: Dashboard -->
     <div class="view" id="view-member-dash">
       <div class="page-header"><div class="page-title">WELCOME BACK</div><div class="page-sub" id="member-sub"></div></div>
@@ -583,7 +410,6 @@ tr:hover td{background:var(--surface2);}
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging-compat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
 <script>
@@ -769,8 +595,8 @@ function loadMemberData() {
 // ══ NAV ═══════════════════════════════════════════════════════════
 function buildNav() {
   var items = currentProfile.role === 'owner'
-    ? [['dashboard','⚡','Dashboard'],['members','👥','Members'],['add','➕','Add Member'],['routines','📋','Routines'],['attendance','✅','Attendance'],['revenue','💰','Revenue'],['notifications','🔔','Notify']]
-    : [['member-dash','⚡','Dashboard'],['routine','📋','My Routine'],['member-att','📲','Attendance'],['member-notifs','🔔','Alerts']];
+    ? [['dashboard','⚡','Dashboard'],['members','👥','Members'],['add','➕','Add Member'],['routines','📋','Routines'],['attendance','✅','Attendance'],['revenue','💰','Revenue']]
+    : [['member-dash','⚡','Dashboard'],['routine','📋','My Routine'],['member-att','📲','Attendance']];
   var sn = document.getElementById('sidebar-nav'); sn.innerHTML = '';
   var bn = document.getElementById('bottom-nav-inner'); bn.innerHTML = '';
   items.forEach(function(item){
@@ -804,8 +630,6 @@ function loadView(id) {
   else if (id === 'routines') { loadMembers().then(loadRoutineEditors); }
   else if (id === 'attendance') { loadMembers().then(loadOwnerAttendance); }
   else if (id === 'revenue') { loadRevenue(); }
-  else if (id === 'notifications') { loadNotifView(); }
-  else if (id === 'member-notifs') { loadMemberNotifs(); }
   else if (id === 'member-dash') { loadMemberData().then(loadMemberDash); }
   else if (id === 'routine') { loadMemberData().then(loadMemberRoutine); }
   else if (id === 'member-att') { loadMemberAttView(); }
@@ -1060,19 +884,13 @@ function loadMemberAttLog() {
   var el = document.getElementById('member-att-log');
   if (!el) return;
   el.innerHTML = '<div class="empty-state">Loading...</div>';
-  // No orderBy = no composite index needed. Sort in JS.
-  db.collection('attendance').where('memberId','==',currentProfile.memberId).get().then(function(s){
+  db.collection('attendance').where('memberId','==',currentProfile.memberId).orderBy('timestamp','desc').limit(60).get().then(function(s){
     if (s.empty) { el.innerHTML='<div class="empty-state">No attendance yet — scan the QR at entrance!</div>'; return; }
-    var rows=[];
-    s.forEach(function(d){ rows.push(d.data()); });
-    rows.sort(function(a,b){ return (b.timestamp||0)-(a.timestamp||0); });
-    el.innerHTML = rows.slice(0,60).map(function(r){
-      return '<div class="att-row"><div><div style="font-weight:600">' + (r.date||'') + '</div><div style="font-size:12px;color:var(--muted)">' + (r.time||'') + '</div></div><span class="att-badge">✓ Present</span></div>';
+    var rows=[]; s.forEach(function(d){ rows.push(d.data()); });
+    el.innerHTML = rows.map(function(r){
+      return '<div class="att-row"><div><div style="font-weight:600">' + r.date + '</div><div style="font-size:12px;color:var(--muted)">' + (r.time||'') + '</div></div><span class="att-badge">✓ Present</span></div>';
     }).join('');
-  }).catch(function(e){
-    el.innerHTML='<div class="empty-state">Error: ' + e.message + '</div>';
-    console.error(e);
-  });
+  }).catch(function(e){ el.innerHTML='<div class="empty-state">Error. Add Firestore composite index for attendance.</div>'; console.error(e); });
 }
 function toggleMemberScanner() { if (scannerOn) stopMemberScanner(); else startMemberScanner(); }
 function startMemberScanner() {
@@ -1187,378 +1005,6 @@ function showNotif() {
   document.getElementById('notif-overlay').classList.add('show');
 }
 function closeNotif() { document.getElementById('notif-overlay').classList.remove('show'); }
-
-
-// ══════════════════════════════════════════════════════════════════
-// PUSH NOTIFICATIONS — Firebase Cloud Messaging
-// ══════════════════════════════════════════════════════════════════
-var VAPID_KEY = 'BFJsPxznkCavAECYmUaXqKoJnVEiH_0O-4XZfP5hLHGDZKMnQpRMSqvU0jgxd2nkEiFkkFsS7xQYHcriPfS_yXs';
-var messaging = null;
-var memberFCMToken = null;
-var notifType = 'all';
-var selectedMulti = [];
-
-// Init messaging after Firebase is ready
-function initMessaging() {
-  try {
-    messaging = firebase.messaging();
-    messaging.usePublicVapidKey(VAPID_KEY);
-  } catch(e) {
-    console.warn('FCM init failed:', e.message);
-  }
-}
-
-// ── Request push permission and get token ─────────────────────────
-function requestPushPermission(callback) {
-  if (!('Notification' in window)) {
-    if (callback) callback(null, 'Push not supported in this browser');
-    return;
-  }
-  if (!messaging) { initMessaging(); }
-  if (!messaging) {
-    if (callback) callback(null, 'FCM not available');
-    return;
-  }
-  Notification.requestPermission().then(function(permission) {
-    if (permission === 'granted') {
-      return messaging.getToken({ vapidKey: VAPID_KEY });
-    } else {
-      throw new Error('Permission denied');
-    }
-  }).then(function(token) {
-    memberFCMToken = token;
-    if (callback) callback(token, null);
-  }).catch(function(e) {
-    if (callback) callback(null, e.message);
-  });
-}
-
-// ── Save FCM token to Firestore for this member ───────────────────
-function saveFCMToken(token) {
-  if (!token || !currentProfile || !currentProfile.memberId) return;
-  db.collection('members').doc(currentProfile.memberId).update({ fcmToken: token }).catch(function(){});
-  db.collection('users').doc(currentProfile.uid).update({ fcmToken: token }).catch(function(){});
-}
-
-// ── Setup push for member (call after login) ──────────────────────
-function setupMemberPush() {
-  if (currentProfile.role !== 'member') return;
-  requestPushPermission(function(token, err) {
-    if (token) {
-      saveFCMToken(token);
-      memberFCMToken = token;
-      // Listen for foreground messages
-      if (messaging) {
-        messaging.onMessage(function(payload) {
-          showInAppNotif(payload.notification.title, payload.notification.body);
-          saveNotifToFirestore(payload.notification.title, payload.notification.body, currentProfile.memberId, false);
-        });
-      }
-    }
-  });
-}
-
-// ── Show in-app notification banner ──────────────────────────────
-function showInAppNotif(title, body) {
-  var banner = document.createElement('div');
-  banner.style.cssText = 'position:fixed;top:16px;right:16px;z-index:9999;background:var(--surface);border:1px solid var(--accent);border-radius:12px;padding:14px 18px;max-width:320px;box-shadow:0 4px 20px rgba(0,0,0,.5);animation:slideInRight .3s ease;';
-  banner.innerHTML = '<div style="font-weight:700;font-size:14px;margin-bottom:4px;color:var(--accent)">🔔 ' + title + '</div><div style="font-size:13px;color:var(--muted)">' + body + '</div>';
-  document.body.appendChild(banner);
-  setTimeout(function(){ banner.style.opacity='0'; banner.style.transition='opacity .5s'; setTimeout(function(){ banner.remove(); },500); },4000);
-}
-
-// ── Save notification to Firestore ───────────────────────────────
-function saveNotifToFirestore(title, body, targetMemberId, isRead) {
-  db.collection('notifications').add({
-    title: title,
-    body: body,
-    targetMemberId: targetMemberId || 'all',
-    isRead: isRead || false,
-    sentAt: new Date().toISOString(),
-    timestamp: Date.now()
-  }).catch(function(e){ console.error('Save notif:', e); });
-}
-
-// ══ OWNER: NOTIFICATION VIEW ══════════════════════════════════════
-function loadNotifView() {
-  // Populate member selects
-  var sel = document.getElementById('notif-member-select');
-  if (sel) {
-    sel.innerHTML = '<option value="">Select member...</option>';
-    members.forEach(function(m){ var o=document.createElement('option'); o.value=m.memberId; o.textContent=m.name+' ('+m.memberId+')'; sel.appendChild(o); });
-  }
-  // Multi-select list
-  var ml = document.getElementById('notif-multi-list');
-  if (ml) {
-    ml.innerHTML = members.map(function(m){
-      return '<label style="display:flex;align-items:center;gap:10px;padding:10px 12px;cursor:pointer;border-bottom:1px solid var(--border);font-size:13px;">' +
-        '<input type="checkbox" value="' + m.memberId + '" onchange="toggleMultiSelect('' + m.memberId + '')" style="accent-color:var(--accent);width:16px;height:16px;"/>' +
-        m.name + ' <span style="color:var(--muted);font-size:12px">(' + m.memberId + ')</span></label>';
-    }).join('');
-  }
-  // Check owner push status
-  var dot = document.getElementById('push-dot');
-  var msg = document.getElementById('push-status-msg');
-  if (Notification.permission === 'granted') {
-    if (dot) dot.className = 'push-dot on';
-    if (msg) msg.textContent = 'Push notifications are enabled for this browser';
-  } else {
-    if (dot) dot.className = 'push-dot off';
-    if (msg) msg.textContent = 'Push not enabled for this browser — members need to allow notifications';
-  }
-  loadNotifHistory();
-}
-
-function setNotifType(type) {
-  notifType = type;
-  document.querySelectorAll('.notif-type-btn').forEach(function(b){ b.classList.remove('active'); });
-  var btn = document.getElementById('ntype-' + type);
-  if (btn) btn.classList.add('active');
-  var sel = document.getElementById('notif-member-select');
-  var ml  = document.getElementById('notif-multi-list');
-  if (sel) sel.className = type === 'one' ? 'notif-member-select show' : 'notif-member-select';
-  if (ml)  ml.style.display = type === 'multi' ? 'block' : 'none';
-  selectedMulti = [];
-}
-
-function toggleMultiSelect(mid) {
-  var idx = selectedMulti.indexOf(mid);
-  if (idx === -1) selectedMulti.push(mid);
-  else selectedMulti.splice(idx, 1);
-}
-
-function sendNotification() {
-  var title = document.getElementById('notif-title-inp').value.trim();
-  var body  = document.getElementById('notif-body-inp').value.trim();
-  var errEl = document.getElementById('notif-send-error');
-  var sucEl = document.getElementById('notif-send-success');
-  errEl.style.display = 'none'; sucEl.style.display = 'none';
-
-  if (!title || !body) { errEl.textContent='Please enter title and message.'; errEl.style.display='block'; return; }
-
-  var targets = [];
-  if (notifType === 'all') {
-    targets = members.map(function(m){ return m.memberId; });
-  } else if (notifType === 'one') {
-    var sel = document.getElementById('notif-member-select').value;
-    if (!sel) { errEl.textContent='Please select a member.'; errEl.style.display='block'; return; }
-    targets = [sel];
-  } else if (notifType === 'multi') {
-    if (!selectedMulti.length) { errEl.textContent='Please select at least one member.'; errEl.style.display='block'; return; }
-    targets = selectedMulti.slice();
-  }
-
-  var btn = document.getElementById('notif-send-btn');
-  btn.textContent = 'Sending...'; btn.disabled = true;
-
-  // Save each notification to Firestore (members will see it in their inbox)
-  var saves = targets.map(function(mid){
-    return db.collection('notifications').add({
-      title: title, body: body,
-      targetMemberId: mid,
-      isRead: false,
-      sentBy: currentProfile.name || 'Owner',
-      sentAt: new Date().toLocaleString(),
-      timestamp: Date.now()
-    });
-  });
-
-  // Also send push via FCM to each member's token
-  // Get tokens from member docs and send via FCM REST API
-  var tokenPromises = targets.map(function(mid){
-    return db.collection('members').doc(mid).get().then(function(s){
-      if (s.exists && s.data().fcmToken) {
-        return sendFCMPush(s.data().fcmToken, title, body);
-      }
-    }).catch(function(){});
-  });
-
-  Promise.all(saves.concat(tokenPromises)).then(function(){
-    sucEl.textContent = '✅ Notification sent to ' + targets.length + ' member' + (targets.length>1?'s':'') + '!';
-    sucEl.style.display = 'block';
-    document.getElementById('notif-title-inp').value = '';
-    document.getElementById('notif-body-inp').value = '';
-    setTimeout(function(){ sucEl.style.display='none'; },5000);
-    loadNotifHistory();
-  }).catch(function(e){
-    errEl.textContent = 'Error: ' + e.message;
-    errEl.style.display = 'block';
-  }).finally(function(){
-    btn.textContent = 'SEND NOTIFICATION 🔔';
-    btn.disabled = false;
-  });
-}
-
-// ── Send FCM push via REST API ────────────────────────────────────
-function sendFCMPush(token, title, body) {
-  // Note: Sending to specific device tokens requires Firebase Admin SDK (server-side)
-  // For client-side we save to Firestore and members see it in their inbox.
-  // The mobile notification bar requires a service worker (firebase-messaging-sw.js)
-  // which is set up separately on a hosted server.
-  return Promise.resolve();
-}
-
-// ── Load notification history ─────────────────────────────────────
-function loadNotifHistory() {
-  db.collection('notifications').orderBy('timestamp','desc').limit(50).get().then(function(s){
-    var el = document.getElementById('notif-history');
-    if (!el) return;
-    if (s.empty) { el.innerHTML='<div class="empty-state">No notifications sent yet</div>'; return; }
-    var seen = {};
-    var items = [];
-    s.forEach(function(d){
-      var data = d.data();
-      var key = data.title + data.body + data.sentAt;
-      if (!seen[key]) { seen[key]=true; data._id=d.id; items.push(data); }
-    });
-    el.innerHTML = items.map(function(n){
-      return '<div class="notif-history-item">' +
-        '<div class="nh-title">🔔 ' + n.title + '</div>' +
-        '<div class="nh-body">' + n.body + '</div>' +
-        '<div class="nh-meta"><span>' + (n.sentAt||'') + '</span><span class="nh-badge">by ' + (n.sentBy||'Owner') + '</span></div>' +
-        '</div>';
-    }).join('');
-  }).catch(function(e){
-    console.error(e);
-  });
-}
-
-// ── Auto-notify on routine save ───────────────────────────────────
-function autoNotifyRoutineChange(memberId, memberName) {
-  db.collection('notifications').add({
-    title: 'Routine Updated! 💪',
-    body: 'Your workout routine has been updated by the trainer. Check your Routine tab!',
-    targetMemberId: memberId,
-    isRead: false,
-    sentBy: 'System',
-    sentAt: new Date().toLocaleString(),
-    timestamp: Date.now()
-  }).catch(function(){});
-  // Also get token and push
-  db.collection('members').doc(memberId).get().then(function(s){
-    if (s.exists && s.data().fcmToken) {
-      sendFCMPush(s.data().fcmToken, 'Routine Updated! 💪', 'Your workout routine has been updated. Check your Routine tab!');
-    }
-  }).catch(function(){});
-}
-
-// ── Auto-notify on reset password ────────────────────────────────
-function autoNotifyPasswordReset(memberId, memberName, email) {
-  db.collection('notifications').add({
-    title: 'Password Reset',
-    body: 'A password reset link has been sent to ' + email + '. Check your email!',
-    targetMemberId: memberId,
-    isRead: false,
-    sentBy: 'System',
-    sentAt: new Date().toLocaleString(),
-    timestamp: Date.now()
-  }).catch(function(){});
-}
-
-// ══ MEMBER: NOTIFICATION VIEW ══════════════════════════════════════
-function loadMemberNotifs() {
-  // Check/request push permission
-  var dot = document.getElementById('member-push-dot');
-  var msg = document.getElementById('member-push-msg');
-  if (Notification.permission === 'granted') {
-    if (dot) dot.className = 'push-dot on';
-    if (msg) msg.textContent = 'Push notifications enabled ✓';
-  } else if (Notification.permission === 'denied') {
-    if (dot) dot.className = 'push-dot off';
-    if (msg) msg.textContent = 'Notifications blocked — enable in browser settings';
-  } else {
-    if (dot) dot.className = 'push-dot';
-    if (msg) msg.textContent = 'Tap to enable push notifications';
-    if (msg) msg.style.cursor = 'pointer';
-    if (msg) msg.onclick = function(){
-      requestPushPermission(function(token, err){
-        if (token) { saveFCMToken(token); loadMemberNotifs(); }
-        else if (err && msg) msg.textContent = 'Could not enable: ' + err;
-      });
-    };
-  }
-  // Load notifications from Firestore
-  var el = document.getElementById('member-notif-list');
-  if (!el) return;
-  el.innerHTML = '<div class="empty-state">Loading...</div>';
-  db.collection('notifications')
-    .where('targetMemberId','==',currentProfile.memberId)
-    .get().then(function(s){
-      if (s.empty) { el.innerHTML='<div class="empty-state">No notifications yet</div>'; return; }
-      var items = [];
-      s.forEach(function(d){ items.push(Object.assign({_id:d.id}, d.data())); });
-      items.sort(function(a,b){ return (b.timestamp||0)-(a.timestamp||0); });
-      el.innerHTML = items.map(function(n){
-        return '<div class="member-notif-item ' + (n.isRead?'':'unread') + '" onclick="markRead('' + n._id + '',this)">' +
-          '<div class="mn-icon">🔔</div>' +
-          '<div style="flex:1"><div class="mn-title">' + n.title + (n.isRead?'':'<span class="unread-dot"></span>') + '</div>' +
-          '<div class="mn-body">' + n.body + '</div>' +
-          '<div class="mn-time">' + (n.sentAt||'') + '</div></div></div>';
-      }).join('');
-    }).catch(function(e){
-      el.innerHTML = '<div class="empty-state">Error: ' + e.message + '</div>';
-    });
-}
-
-function markRead(id, el) {
-  db.collection('notifications').doc(id).update({ isRead: true }).catch(function(){});
-  if (el) { el.classList.remove('unread'); var dot=el.querySelector('.unread-dot'); if(dot) dot.remove(); }
-}
-
-function markAllRead() {
-  db.collection('notifications').where('targetMemberId','==',currentProfile.memberId).where('isRead','==',false).get().then(function(s){
-    var batch = db.batch();
-    s.forEach(function(d){ batch.update(d.ref, {isRead:true}); });
-    return batch.commit();
-  }).then(function(){ loadMemberNotifs(); }).catch(function(){});
-}
-
-// ══ Hook auto-notify into existing functions ══════════════════════
-// Patch saveRoutine to auto-notify member
-var _origSaveRoutine = saveRoutine;
-saveRoutine = function(docId) {
-  var m = members.find(function(x){ return x.docId===docId; });
-  _origSaveRoutine(docId);
-  if (m) setTimeout(function(){ autoNotifyRoutineChange(m.memberId, m.name); }, 1000);
-};
-
-// Patch confirmReset to auto-notify member
-var _origConfirmReset = confirmReset;
-confirmReset = function() {
-  if (resetTarget) {
-    var mid = resetTarget.docId;
-    var mname = resetTarget.name;
-    var email = resetTarget.email;
-    _origConfirmReset();
-    setTimeout(function(){ autoNotifyPasswordReset(mid, mname, email); }, 1000);
-  } else {
-    _origConfirmReset();
-  }
-};
-
-// ══ Service Worker Registration (for background push) ═════════════
-// The service worker file must be hosted at /firebase-messaging-sw.js
-// For local HTML files, background push won't work but foreground push will.
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/firebase-messaging-sw.js').then(function(reg){
-    console.log('SW registered:', reg.scope);
-  }).catch(function(e){
-    console.log('SW registration skipped (local file):', e.message);
-  });
-}
-
-// Init messaging and setup push after auth
-var _origShowApp = showApp;
-showApp = function() {
-  _origShowApp();
-  setTimeout(function(){
-    initMessaging();
-    if (currentProfile && currentProfile.role === 'member') {
-      setupMemberPush();
-    }
-  }, 1000);
-};
-
 </script>
 </body>
 </html>
