@@ -1,71 +1,45 @@
-/**
- * Firebase Messaging Service Worker
- * ----------------------------------
- * Handles background push notifications when the app is not in focus.
- * This file MUST be at the root of the public directory.
- */
+// firebase-messaging-sw.js
+// IMPORTANT: Place this file in the SAME FOLDER as gym-firebase.html
+// This enables background push notifications when the browser tab is closed
 
-/* eslint-disable no-undef */
-importScripts("https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js");
-importScripts("https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js");
+importScripts('https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging-compat.js');
 
-// Initialize Firebase in the service worker
 firebase.initializeApp({
-  apiKey: "AIzaSyBnwb6mxzoM1r1bBchLCrdiuCGQ91kpJ9o",
-  authDomain: "liebherr-task-tracker.firebaseapp.com",
-  databaseURL: "https://liebherr-task-tracker-default-rtdb.firebaseio.com",
-  projectId: "liebherr-task-tracker",
-  storageBucket: "liebherr-task-tracker.firebasestorage.app",
-  messagingSenderId: "816042448668",
-  appId: "1:816042448668:web:2a634879c94189109f8cd9",
-  measurementId: "G-Q97FNCPDP4",
+  apiKey: "AIzaSyDVPaaRLbEv796fxoId0jtXtV1JhrpFdE0",
+  authDomain: "abc-gym-4dc17.firebaseapp.com",
+  projectId: "abc-gym-4dc17",
+  storageBucket: "abc-gym-4dc17.firebasestorage.app",
+  messagingSenderId: "377757615025",
+  appId: "1:377757615025:web:62ad568230488a82d57390"
 });
 
-// Get messaging instance
 const messaging = firebase.messaging();
 
-/**
- * Handle background messages
- * This fires when the app tab is not active/focused
- */
-messaging.onBackgroundMessage((payload) => {
-  console.log("[firebase-messaging-sw.js] Background message received:", payload);
-
-  const notificationTitle = payload.notification?.title || payload.data?.title || "Liebherr Task Tracker";
-  const notificationOptions = {
-    body: payload.notification?.body || payload.data?.message || "You have a new notification",
-    icon: "/favicon.ico",
-    badge: "/favicon.ico",
-    tag: "liebherr-notification",
-    data: payload.data,
-    vibrate: [100, 50, 100],
-    actions: [
-      { action: "open", title: "Open App" },
-      { action: "dismiss", title: "Dismiss" },
-    ],
+// Handle background messages (tab closed / minimized)
+messaging.onBackgroundMessage(function(payload) {
+  const title   = (payload.notification && payload.notification.title) || 'ABC 3.0 Gym';
+  const body    = (payload.notification && payload.notification.body)  || 'New message from your gym';
+  const options = {
+    body: body,
+    icon: '/icon.png',
+    badge: '/icon.png',
+    tag: 'abc-gym',
+    vibrate: [200, 100, 200],
+    requireInteraction: false
   };
-
-  self.registration.showNotification(notificationTitle, notificationOptions);
+  return self.registration.showNotification(title, options);
 });
 
-/**
- * Handle notification click — open the app when user clicks the notification
- */
-self.addEventListener("notificationclick", (event) => {
-  console.log("[firebase-messaging-sw.js] Notification clicked:", event);
+// Click notification → open or focus the app
+self.addEventListener('notificationclick', function(event) {
   event.notification.close();
-
-  // Focus existing window or open new one
   event.waitUntil(
-    clients.matchAll({ type: "window", includeUncontrolled: true }).then((clientList) => {
-      for (const client of clientList) {
-        if (client.url && "focus" in client) {
-          return client.focus();
-        }
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function(list) {
+      for (var i = 0; i < list.length; i++) {
+        if ('focus' in list[i]) return list[i].focus();
       }
-      if (clients.openWindow) {
-        return clients.openWindow("/");
-      }
+      return clients.openWindow('/');
     })
   );
 });
